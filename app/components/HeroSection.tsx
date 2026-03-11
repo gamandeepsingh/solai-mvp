@@ -319,12 +319,11 @@ export default function HeroSection() {
         </div>
 
         {/* Chat */}
-        <div ref={chatRef} className="relative z-10 w-full max-w-lg mx-auto pb-24 px-0">
+        <div ref={chatRef} className="relative z-10 w-full max-w-lg mx-auto pb-0 px-0">
           <ChatDemo />
         </div>
 
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-black to-transparent pointer-events-none z-10" />
+       
       </section>
     </>
   );

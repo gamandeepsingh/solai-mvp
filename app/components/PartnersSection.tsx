@@ -60,11 +60,8 @@ export default function PartnersSection() {
             Built within the ecosystem
           </p>
           <h2 className="text-[22px] sm:text-[26px] font-semibold text-white/80 tracking-tight">
-            Powered by Solana
+            On Solana
           </h2>
-          <p className="text-[13px] text-white/30 max-w-xs leading-relaxed">
-            SOLAI runs on Solana and is proudly supported by the Superteam community.
-          </p>
         </motion.div>
 
         {/* Logos */}

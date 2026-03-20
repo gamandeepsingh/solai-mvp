@@ -10,6 +10,17 @@ export default function Home() {
         <ParticleCanvas />
         <HeroSection />
         <PartnersSection />
+        <section className="bg-black border-t border-white/6 py-8 px-6">
+          <div className="max-w-3xl mx-auto flex items-center justify-center gap-6 text-xs text-white/40">
+            <a href="/privacy" className="hover:text-white/70 transition-colors">
+              Privacy Policy
+            </a>
+            <span className="text-white/15">•</span>
+            <a href="/term-condition" className="hover:text-white/70 transition-colors">
+              Terms and Conditions
+            </a>
+          </div>
+        </section>
       </main>
     </SmoothScrollProvider>
   );

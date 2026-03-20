@@ -249,7 +249,7 @@ export default function HeroSection() {
 
       <section
         ref={heroRef}
-        className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black px-6"
+        className="relative min-h-screen flex flex-col items-center justify-center overflow-hidde px-6"
       >
         {/* Ambient glows */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">

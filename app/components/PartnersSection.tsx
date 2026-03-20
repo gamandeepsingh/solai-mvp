@@ -48,7 +48,7 @@ function SuperteamLogo({ className }: { className?: string }) {
 
 export default function PartnersSection() {
   return (
-    <section className="relative bg-black border-t border-white/6 py-20 px-6 overflow-hidden">
+    <section className="relative border-t border-white/6 py-20 px-6 overflow-hidden">
       {/* Subtle top glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px bg-white/6" />
 

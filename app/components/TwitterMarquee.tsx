@@ -20,12 +20,12 @@ export default function TwitterMarquee() {
   const loopIds = ids.length > 0 ? [...ids, ...ids] : [];
 
   return (
-    <section className="relative bg-black border-t border-white/6 py-20 overflow-hidden">
+    <section className="relative py-20 overflow-hidden">
       <div className="max-w-5xl mx-auto px-6">
         <div className="flex flex-col items-center text-center gap-3 mb-10">
           <p className="text-[11px] tracking-[0.2em] uppercase text-white/30">Community</p>
           <h2 className="text-2xl sm:text-3xl font-semibold text-white/85 tracking-tight">
-            Check out the post from our Twitter community and share your experience with us!
+            Check our Twitter post & share feedback
           </h2>
         </div>
       </div>

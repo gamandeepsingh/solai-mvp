@@ -1,8 +1,18 @@
+"use client";
+
 import HeroSection from "./components/HeroSection";
 import ParticleCanvas from "./components/ParticleCanvas";
 import SmoothScrollProvider from "./components/SmoothScrollProvider";
 import PartnersSection from "./components/PartnersSection";
 import TwitterMarquee from "./components/TwitterMarquee";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  initial: { opacity: 0, y: 16 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-60px" } as const,
+  transition: { duration: 0.6, ease: "easeOut" as const },
+};
 
 export default function Home() {
   return (
@@ -22,6 +32,14 @@ export default function Home() {
               Terms and Conditions
             </a>
           </div>
+          {/* Bottom note */}
+        <motion.p
+          {...fadeUp}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+          className="absolute -bottom-16 right-0  text-[11px] text-white/50 mb-20"
+        >
+          © {new Date().getFullYear()} SOLAI. All rights reserved.
+        </motion.p>
         </section>
       </main>
     </SmoothScrollProvider>

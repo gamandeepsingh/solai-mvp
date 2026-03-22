@@ -48,7 +48,7 @@ function SuperteamLogo({ className }: { className?: string }) {
 
 export default function PartnersSection() {
   return (
-    <section className="relative border-t border-white/6 py-20 px-6 overflow-hidden">
+    <section className="relative border-t border-white/6 pt-20 px-6 overflow-hidden">
       {/* Subtle top glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px bg-white/6" />
 
@@ -89,16 +89,6 @@ export default function PartnersSection() {
             </div>
           </div>
         </motion.div>
-
-        {/* Bottom note */}
-        <motion.p
-          {...fadeUp}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-          className="text-[11px] text-white/20"
-        >
-          © {new Date().getFullYear()} SOLAI. All rights reserved.
-        </motion.p>
-
       </div>
     </section>
   );

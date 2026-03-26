@@ -5,6 +5,7 @@ import { TweetCard } from "./TweetCard";
 const TWEETS: string[] = [
   "https://x.com/solaiwallet/status/2035343160654885014?s=20",
   "https://x.com/solaiwallet/status/2035091508333052212?s=20",
+  "https://x.com/solaiwallet/status/2037051034300985600?s=20",
   "https://x.com/solaiwallet/status/2035068857573154833?s=20",
   "https://x.com/solaiwallet/status/2035622366408274220?s=20",
   "https://x.com/solaiwallet/status/2034697809031831959?s=20",

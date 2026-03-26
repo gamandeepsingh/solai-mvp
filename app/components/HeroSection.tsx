@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import Image from "next/image";
-import WaitlistModal from "./WaitlistModal";
 
 // ─── Chat Data ───────────────────────────────────────────────────────
 interface ChatMessage {
@@ -219,7 +218,6 @@ function ChatDemo() {
 
 // ─── Hero Section ─────────────────────────────────────────────────────
 export default function HeroSection() {
-  const [modalOpen, setModalOpen] = useState(false);
   const heroRef   = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const subRef    = useRef<HTMLParagraphElement>(null);
@@ -244,13 +242,10 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <>
-      <WaitlistModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-
-      <section
-        ref={heroRef}
-        className="relative min-h-screen flex flex-col items-center justify-center overflow-hidde px-6"
-      >
+    <section
+      ref={heroRef}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6"
+    >
         {/* Ambient glows */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -top-[10%] left-1/2 -translate-x-1/2 w-175 h-125 rounded-full bg-[#ABFF7A]/4.5 blur-[160px]" />
@@ -260,14 +255,17 @@ export default function HeroSection() {
         <div className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center text-center gap-5 pt-20 pb-10">
 
           {/* Badge */}
-          <motion.div
+          <motion.a
+            href="https://chromewebstore.google.com/detail/solai-wallet/lfclbffajamcijjdpaomclldjpdgopej"
+            target="_blank"
+            rel="noreferrer"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="group flex items-center cursor-pointer font-medium text-[11px] px-[1.3em] py-[0.8em] pl-[0.9em] text-white tracking-[0.05em] rounded-[16px] bg-gradient-to-r from-[#0f0c29] via-[#302b63] to-[#24243e]"
+            className="group flex items-center cursor-pointer font-medium text-[11px] px-4 py-2 text-white/70 tracking-[0.12em] rounded-full border border-white/10 bg-white/3 hover:bg-white/6 transition-colors"
           >
             <svg
-      className="mr-[3px] rotate-[30deg] transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-[5px] group-hover:rotate-[90deg]"
+              className="mr-0.75 rotate-30 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-1.25 group-hover:rotate-90"
       height="16"
       width="16"
       viewBox="0 0 24 24"
@@ -278,10 +276,10 @@ export default function HeroSection() {
       <path d="M5 13c0-5.088 2.903-9.436 7-11.182C16.097 3.564 19 7.912 19 13c0 .823-.076 1.626-.22 2.403l1.94 1.832a.5.5 0 0 1 .095.603l-2.495 4.575a.5.5 0 0 1-.793.114l-2.234-2.234a1 1 0 0 0-.707-.293H9.414a1 1 0 0 0-.707.293l-2.234 2.234a.5.5 0 0 1-.793-.114l-2.495-4.575a.5.5 0 0 1 .095-.603l1.94-1.832C5.077 14.626 5 13.823 5 13zm1.476 6.696l.817-.817A3 3 0 0 1 9.414 18h5.172a3 3 0 0 1 2.121.879l.817.817.982-1.8-1.1-1.04a2 2 0 0 1-.593-1.82c.124-.664.187-1.345.187-2.036 0-3.87-1.995-7.3-5-8.96C8.995 5.7 7 9.13 7 13c0 .691.063 1.372.187 2.037a2 2 0 0 1-.593 1.82l-1.1 1.039.982 1.8zM12 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"></path>
     </svg>
 
-    <span className="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-[7px]">
-      Launching soon
+    <span className="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-1.75">
+      Now live on Chrome Web Store
     </span>
-          </motion.div>
+          </motion.a>
 
           {/* Heading */}
           <h1
@@ -304,17 +302,19 @@ export default function HeroSection() {
 
           {/* CTA */}
           <div ref={btnsRef} className="flex items-center justify-center gap-3 mt-1">
-            <motion.button
-              onClick={() => setModalOpen(true)}
+            <motion.a
+              href="https://chromewebstore.google.com/detail/solai-wallet/lfclbffajamcijjdpaomclldjpdgopej"
+              target="_blank"
+              rel="noreferrer"
               whileHover={{ scale: 1.03, boxShadow: "0 0 28px rgba(171,255,122,0.3), 0 0 60px rgba(171,255,122,0.1)" }}
               whileTap={{ scale: 0.97 }}
               className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#ABFF7A] text-black text-sm font-semibold tracking-wide transition-all duration-200"
             >
-              Get Early Access
+              Install Extension
               <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
                 <path d="M2 7H12M7 2L12 7L7 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </motion.button>
+            </motion.a>
           </div>
         </div>
 
@@ -324,7 +324,6 @@ export default function HeroSection() {
         </div>
 
        
-      </section>
-    </>
+    </section>
   );
 }

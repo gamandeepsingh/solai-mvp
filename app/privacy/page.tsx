@@ -1,3 +1,15 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy — SOLAI Wallet",
+  description:
+    "Read the SOLAI Wallet privacy policy. We are a non-custodial crypto wallet — your private keys and funds are always yours.",
+  alternates: {
+    canonical: "https://solai.gamandeep.xyz/privacy",
+  },
+  robots: { index: true, follow: true },
+};
+
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-black text-white px-6 py-16">

@@ -1,3 +1,15 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms and Conditions — SOLAI Wallet",
+  description:
+    "Read the SOLAI Wallet terms and conditions. Understand your rights and responsibilities when using our AI-powered Solana crypto wallet.",
+  alternates: {
+    canonical: "https://solai.gamandeep.xyz/term-condition",
+  },
+  robots: { index: true, follow: true },
+};
+
 export default function TermsPage() {
   return (
     <main className="min-h-screen bg-black text-white px-6 py-16">

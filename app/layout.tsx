@@ -60,6 +60,41 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://solai.gamandeep.xyz/#website",
+      url: "https://solai.gamandeep.xyz",
+      name: "SOLAI Wallet",
+      description:
+        "AI-powered crypto wallet that turns simple commands into automated on-chain actions on Solana.",
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://solai.gamandeep.xyz/#app",
+      name: "SOLAI Wallet",
+      applicationCategory: "FinanceApplication",
+      operatingSystem: "Chrome",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      description:
+        "SOLAI is an AI-powered Solana crypto wallet. Send payments, automate trades, and swap tokens at the best rate across DEXs using plain English commands.",
+      url: "https://solai.gamandeep.xyz",
+      downloadUrl:
+        "https://chromewebstore.google.com/detail/solai-wallet/lfclbffajamcijjdpaomclldjpdgopej",
+      screenshot: "https://solai.gamandeep.xyz/preview.png",
+      keywords:
+        "AI crypto wallet, Solana wallet, DeFi automation, AI trading, token swap, blockchain wallet",
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,6 +102,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
       >

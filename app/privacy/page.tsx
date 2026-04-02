@@ -122,7 +122,7 @@ export default function PrivacyPage() {
         <section className="space-y-4 text-sm text-white/70 leading-relaxed">
           <h2 className="text-lg text-white font-medium">11. Contact</h2>
           <p>For questions, contact:</p>
-          <p>solaiwallet@gail.com</p>
+          <p>solaiwallet@gmail.com</p>
         </section>
       </div>
     </main>

@@ -114,7 +114,7 @@ export default function TermsPage() {
 
         <section className="space-y-4 text-sm text-white/70 leading-relaxed">
           <h2 className="text-lg text-white font-medium">12. Contact</h2>
-          <p>solaiwallet@gail.com</p>
+          <p>solaiwallet@gmail.com</p>
         </section>
       </div>
     </main>

@@ -48,7 +48,7 @@ function SuperteamLogo({ className }: { className?: string }) {
 
 export default function PartnersSection() {
   return (
-    <section className="relative border-t border-white/6 pt-20 px-6 overflow-hidden">
+    <section className="relative border-t border-white/6 py-24 px-6 overflow-hidden">
       {/* Subtle top glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px bg-white/6" />
 
@@ -59,32 +59,35 @@ export default function PartnersSection() {
           <p className="text-[11px] font-medium tracking-[0.18em] uppercase text-white/25">
             Built within the ecosystem
           </p>
-          <h2 className="text-[22px] sm:text-[26px] font-semibold text-white/80 tracking-tight">
-            On Solana
+          <h2 className="text-[26px] sm:text-[30px] font-bold text-white/80 tracking-tight">
+            Built on Solana
           </h2>
+          <p className="text-[13px] text-white/30 mt-1">
+            Part of the Superteam ecosystem
+          </p>
         </motion.div>
 
         {/* Logos */}
         <motion.div
           {...fadeUp}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-16"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10"
         >
           {/* Solana */}
-          <div className="flex flex-col items-center gap-3 group">
-            <div className="flex items-center gap-3 opacity-50 group-hover:opacity-80 transition-opacity duration-300">
-              <SolanaLogo className="h-7 w-auto" />
-              <span className="text-white text-xl font-bold tracking-tight">Solana</span>
+          <div className="group">
+            <div className="flex items-center gap-3 px-5 py-3 rounded-2xl glass hover:bg-white/5 transition-colors duration-300 opacity-50 group-hover:opacity-80">
+              <SolanaLogo className="h-6 w-auto" />
+              <span className="text-white text-[18px] font-bold tracking-tight">Solana</span>
             </div>
           </div>
 
           {/* Divider */}
-          <div className="hidden sm:block w-px h-8 bg-white/10" />
-          <div className="sm:hidden w-8 h-px bg-white/10" />
+          <div className="hidden sm:block w-px h-8 bg-white/8" />
+          <div className="sm:hidden w-8 h-px bg-white/8" />
 
           {/* Superteam */}
-          <div className="flex flex-col items-center gap-3 group">
-            <div className="opacity-50 group-hover:opacity-80 transition-opacity duration-300">
+          <div className="group">
+            <div className="flex items-center justify-center px-5 py-3 rounded-2xl glass hover:bg-white/5 transition-colors duration-300 opacity-50 group-hover:opacity-80">
               <SuperteamLogo className="h-7 w-auto" />
             </div>
           </div>

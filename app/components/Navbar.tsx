@@ -100,6 +100,12 @@ export default function Navbar({ onOpenWaitlist }: NavbarProps) {
               {link.label}
             </button>
           ))}
+          <Link
+            href="/doc"
+            className="text-[13px] text-white/40 hover:text-white/80 transition-colors duration-200 font-medium"
+          >
+            Docs
+          </Link>
         </div>
 
         {/* Right CTAs */}
@@ -188,6 +194,13 @@ export default function Navbar({ onOpenWaitlist }: NavbarProps) {
                 {link.label}
               </button>
             ))}
+            <Link
+              href="/doc"
+              onClick={() => setMenuOpen(false)}
+              className="text-[14px] text-white/55 hover:text-white/85 transition-colors text-left font-medium"
+            >
+              Docs
+            </Link>
             <div className="flex flex-col gap-2.5 pt-2 border-t border-white/6">
               <button
                 onClick={() => {

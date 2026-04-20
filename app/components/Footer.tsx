@@ -99,6 +99,7 @@ export default function Footer() {
             </p>
             <FooterLink href="#features">Features</FooterLink>
             <FooterLink href="#how-it-works">How It Works</FooterLink>
+            <FooterLink href="/doc">Documentation</FooterLink>
             <FooterLink href={CHROME_URL} external>
               Install Extension
             </FooterLink>

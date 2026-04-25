@@ -16,18 +16,23 @@ const STEPS: Step[] = [
   {
     number: "01",
     headline: "Install the extension",
-    body: "Add SOLAI to Chrome in one click. Your wallet is created instantly — no lengthy setup, no seed phrase drama.",
+    body: "Add SOLAI to Chrome in one click. Create a new wallet with a 12-word seed or import an existing one. Your keys never leave your device.",
     cta: { label: "Add to Chrome", href: CHROME_URL },
   },
   {
     number: "02",
     headline: "Type what you want",
-    body: 'Say "Send 10 USDC to Alice" or "Buy SOL if it drops below $120". SOLAI parses your intent and finds the optimal path.',
+    body: 'Say "Send 10 USDC to Alice" or "Buy SOL if it drops 10%" or "Create an agent wallet for subscriptions". SOLAI parses intent and finds the optimal path.',
   },
   {
     number: "03",
-    headline: "Confirm and done",
-    body: "Review the plain-language summary. One tap to sign. Transaction executes, receipt appears — that's it.",
+    headline: "Review and confirm",
+    body: "See a clear summary of the action with estimates (slippage, fees, route). One tap to sign. Transaction executes on-chain, receipt appears — done.",
+  },
+  {
+    number: "04",
+    headline: "Track and automate",
+    body: "Monitor your spending heatmap, manage agent wallets, collect stealth payments, and set up recurring orders — all without re-entering passwords.",
   },
 ];
 

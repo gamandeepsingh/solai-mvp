@@ -1,13 +1,27 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — SOLAI Wallet",
+  title: "Privacy Policy — SOLAI Wallet | Non-Custodial Crypto Wallet",
   description:
-    "Read the SOLAI Wallet privacy policy. We are a non-custodial crypto wallet — your private keys and funds are always yours.",
-  alternates: {
-    canonical: "https://solai.gamandeep.xyz/privacy",
+    "Read the SOLAI Wallet privacy policy. We are a non-custodial crypto wallet — your private keys and funds are always yours. Learn how we protect your data.",
+  openGraph: {
+    title: "Privacy Policy — SOLAI Wallet",
+    description:
+      "Read the SOLAI Wallet privacy policy. We are a non-custodial crypto wallet — your private keys and funds are always yours.",
+    url: "https://solai.website/privacy",
+    type: "website",
   },
-  robots: { index: true, follow: true },
+  alternates: {
+    canonical: "https://solai.website/privacy",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default function PrivacyPage() {

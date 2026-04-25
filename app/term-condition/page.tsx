@@ -1,13 +1,27 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms and Conditions — SOLAI Wallet",
+  title: "Terms and Conditions — SOLAI Wallet | Legal Agreement",
   description:
-    "Read the SOLAI Wallet terms and conditions. Understand your rights and responsibilities when using our AI-powered Solana crypto wallet.",
-  alternates: {
-    canonical: "https://solai.gamandeep.xyz/term-condition",
+    "Read the SOLAI Wallet terms and conditions. Understand your rights and responsibilities when using our AI-powered Solana crypto wallet. Important legal information.",
+  openGraph: {
+    title: "Terms and Conditions — SOLAI Wallet",
+    description:
+      "Read the SOLAI Wallet terms and conditions. Understand your rights and responsibilities when using our AI-powered Solana crypto wallet.",
+    url: "https://solai.website/term-condition",
+    type: "website",
   },
-  robots: { index: true, follow: true },
+  alternates: {
+    canonical: "https://solai.website/term-condition",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default function TermsPage() {

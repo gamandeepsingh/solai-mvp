@@ -23,8 +23,8 @@ const FEATURES: Feature[] = [
     ),
     tag: "AI Commands",
     headline: "Talk to your wallet",
-    body: "Type plain English. SOLAI understands context, picks the best route, and executes — no menus, no gas math, no mistakes.",
-    demo: ["Send $5 to mom every day", "Buy ETH if price drops 10%", "Swap USDC at best rate"],
+    body: "Type plain English. SOLAI parses intent, finds optimal routes via Jupiter DEX, and executes — no gas math, no menus, just results.",
+    demo: ["Send $5 to Alice every day", "Buy SOL if price drops 10%", "Swap USDC at best rate"],
   },
   {
     icon: (
@@ -36,9 +36,9 @@ const FEATURES: Feature[] = [
       </svg>
     ),
     tag: "Stealth Addresses",
-    headline: "Private by default",
-    body: "Every transaction routes through a fresh one-time address. Your on-chain identity stays invisible — even to the recipient.",
-    demo: ["Receive funds privately", "Break address linkability", "Zero metadata leakage"],
+    headline: "Privacy by default",
+    body: "ECDH-based one-time addresses. Every send creates a fresh, unlinkable address — no on-chain history, no address reuse, true privacy.",
+    demo: ["Generate shareable meta-address", "Auto-discover incoming payments", "Sweep to main wallet with one tap"],
   },
   {
     icon: (
@@ -57,8 +57,8 @@ const FEATURES: Feature[] = [
     ),
     tag: "Agent Wallets",
     headline: "Wallets that work for you",
-    body: "Deploy programmable sub-wallets that run autonomously. Set rules, trigger payments via x402, and let agents handle the rest.",
-    demo: ["x402 microtransactions", "Autonomous DeFi loops", "Conditional recurring payments"],
+    body: "Programmable sub-wallets that auto-sign payments within guardrails. Perfect for subscriptions, gaming, x402 micropayments, and DeFi bots.",
+    demo: ["Daily/per-tx spend limits", "x402 micropayment protocol", "Auto-refill & conditional orders"],
   },
 ];
 

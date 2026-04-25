@@ -13,18 +13,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://solai.gamandeep.xyz"),
-  title: "SOLAI Wallet — AI-powered crypto wallet",
+  metadataBase: new URL("https://solai.website"),
+  title: "SOLAI Wallet — AI-powered crypto wallet | Automate DeFi with Commands",
   description:
-    "SOLAI turns simple commands into automated on-chain actions. Send payments, automate trades, and swap tokens at the best rate across DEXs.",
-  keywords: ["crypto", "AI wallet", "Solana", "DeFi", "swap", "blockchain", "SOLAI"],
+    "SOLAI is an AI-powered Solana wallet that turns natural language commands into automated on-chain actions. Send payments, automate trades, swap tokens across DEXs, and manage DeFi with simple English commands. No technical knowledge required.",
+  keywords: [
+    "AI crypto wallet",
+    "Solana wallet",
+    "DeFi automation",
+    "AI trading",
+    "token swap",
+    "blockchain wallet",
+    "crypto automation",
+    "AI wallet Solana",
+    "natural language blockchain",
+    "DEX swap",
+    "Solana DeFi",
+    "automated trading",
+  ],
   authors: [{ name: "SOLAI" }],
   creator: "SOLAI",
+  publisher: "SOLAI",
+  formatDetection: {
+    email: false,
+    telephone: false,
+    address: false,
+  },
   openGraph: {
     title: "SOLAI Wallet — AI-powered crypto wallet",
     description:
       "SOLAI turns simple commands into automated on-chain actions. Send payments, automate trades, and swap tokens at the best rate across DEXs.",
-    url: "https://solai.gamandeep.xyz",
+    url: "https://solai.website",
     siteName: "SOLAI Wallet",
     images: [
       {
@@ -32,6 +51,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: "SOLAI Wallet — AI-powered crypto wallet",
+        type: "image/png",
       },
     ],
     locale: "en_US",
@@ -44,19 +64,25 @@ export const metadata: Metadata = {
       "SOLAI turns simple commands into automated on-chain actions. Send payments, automate trades, and swap tokens at the best rate across DEXs.",
     images: ["/preview.png"],
     creator: "@solai_wallet",
+    site: "@solai_wallet",
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
   alternates: {
-    canonical: "https://solai.gamandeep.xyz",
+    canonical: "https://solai.website",
+  },
+  verification: {
+    google: "cV5sclQT7dQSp2BzYYhkf2RNNvSyI77-5odn47QFinU",
   },
 };
 
@@ -64,17 +90,40 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://solai.website/#organization",
+      name: "SOLAI",
+      url: "https://solai.website",
+      logo: "https://solai.website/logo.png",
+      description: "AI-powered Solana crypto wallet and DeFi automation platform",
+      sameAs: ["https://twitter.com/solai_wallet"],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "Customer Support",
+        url: "https://solai.website",
+      },
+    },
+    {
       "@type": "WebSite",
-      "@id": "https://solai.gamandeep.xyz/#website",
-      url: "https://solai.gamandeep.xyz",
+      "@id": "https://solai.website/#website",
+      url: "https://solai.website",
       name: "SOLAI Wallet",
       description:
         "AI-powered crypto wallet that turns simple commands into automated on-chain actions on Solana.",
       inLanguage: "en-US",
+      isPartOf: { "@id": "https://solai.website/#organization" },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://solai.website/?s={search_term_string}",
+        },
+        "query-input": "required name=search_term_string",
+      },
     },
     {
       "@type": "SoftwareApplication",
-      "@id": "https://solai.gamandeep.xyz/#app",
+      "@id": "https://solai.website/#app",
       name: "SOLAI Wallet",
       applicationCategory: "FinanceApplication",
       operatingSystem: "Chrome",
@@ -85,12 +134,16 @@ const jsonLd = {
       },
       description:
         "SOLAI is an AI-powered Solana crypto wallet. Send payments, automate trades, and swap tokens at the best rate across DEXs using plain English commands.",
-      url: "https://solai.gamandeep.xyz",
+      url: "https://solai.website",
       downloadUrl:
         "https://chromewebstore.google.com/detail/solai-wallet/lfclbffajamcijjdpaomclldjpdgopej",
-      screenshot: "https://solai.gamandeep.xyz/preview.png",
+      screenshot: ["https://solai.website/preview.png"],
       keywords:
         "AI crypto wallet, Solana wallet, DeFi automation, AI trading, token swap, blockchain wallet",
+      author: {
+        "@type": "Organization",
+        name: "SOLAI",
+      },
     },
   ],
 };
@@ -103,7 +156,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="google-site-verification" content="cV5sclQT7dQSp2BzYYhkf2RNNvSyI77-5odn47QFinU" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

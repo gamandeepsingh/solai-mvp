@@ -11,24 +11,29 @@ const COMMAND_ROWS: Command[][] = [
   [
     { text: "Send $5 to mom every day", accent: true },
     { text: "Buy SOL if price drops 10%", accent: true },
-    { text: "Swap USDC at best rate", accent: true },
-  ],
-  [
-    { text: "Pay rent on the 1st" },
-    { text: "What's my portfolio worth?" },
-    { text: "Show staking yields" },
-    { text: "Cancel all recurring payments" },
+    { text: "Swap USDC at best rate across DEXs", accent: true },
   ],
   [
     { text: "Create an agent wallet for subscriptions", accent: true },
-    { text: "Send privately to 0x..." },
-    { text: "Sweep all dust to USDC", accent: true },
+    { text: "Send privately using stealth address" },
+    { text: "Generate one-time payment address", accent: true },
   ],
   [
-    { text: "Tip 1 SOL to the dev" },
-    { text: "Set max spend $50/day" },
-    { text: "Notify me when ETH hits $3k" },
-    { text: "Bridge to Base" },
+    { text: "Set auto-payment to Alice every Monday" },
+    { text: "What's my portfolio worth?" },
+    { text: "Sign with my Ledger device" },
+    { text: "Export all my agent configurations" },
+  ],
+  [
+    { text: "Pay via x402 micropayment protocol", accent: true },
+    { text: "Enable notifications for large transactions" },
+    { text: "Sweep all dust tokens to USDC" },
+    { text: "Revoke dApp permissions for Uniswap" },
+  ],
+  [
+    { text: "Monitor my spending heatmap" },
+    { text: "Create a DCA bot for SOL", accent: true },
+    { text: "Collect my stealth payments" },
   ],
 ];
 

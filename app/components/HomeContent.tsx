@@ -4,28 +4,33 @@ import { useState } from "react";
 import HeroSection from "./HeroSection";
 import ParticleCanvas from "./ParticleCanvas";
 import SmoothScrollProvider from "./SmoothScrollProvider";
-import PartnersSection from "./PartnersSection";
 import Navbar from "./Navbar";
-import FeaturesSection from "./FeaturesSection";
+import PillarsSection from "./PillarsSection";
+import GuardrailsSection from "./GuardrailsSection";
+import StealthSection from "./StealthSection";
 import HowItWorksSection from "./HowItWorksSection";
-import CommandsShowcase from "./CommandsShowcase";
+import WalletSection from "./WalletSection";
+import PartnersSection from "./PartnersSection";
 import WaitlistCTA from "./WaitlistCTA";
 import Footer from "./Footer";
 import WaitlistModal from "./WaitlistModal";
 
 export default function HomeContent() {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const openWaitlist = () => setWaitlistOpen(true);
 
   return (
     <SmoothScrollProvider>
-      <main className="relative bg-black min-h-screen">
+      <main className="relative bg-[var(--bg)] min-h-screen">
         <ParticleCanvas />
-        <Navbar onOpenWaitlist={() => setWaitlistOpen(true)} />
-        <HeroSection onOpenWaitlist={() => setWaitlistOpen(true)} />
-        <FeaturesSection />
-        <HowItWorksSection />
+        <Navbar onOpenWaitlist={openWaitlist} />
+        <HeroSection onOpenWaitlist={openWaitlist} />
+        <PillarsSection />
+        <GuardrailsSection />
+        <StealthSection />
+        <HowItWorksSection onOpenWaitlist={openWaitlist} />
+        <WalletSection />
         <PartnersSection />
-        <CommandsShowcase />
         <WaitlistCTA />
         <Footer />
         <WaitlistModal

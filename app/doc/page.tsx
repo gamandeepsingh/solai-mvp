@@ -1,24 +1,22 @@
 import type { Metadata } from "next";
-import { readFileSync } from "fs";
-import path from "path";
-import DocContent from "./DocContent";
+import DocsHub from "./DocsHub";
 
 export const metadata: Metadata = {
-  title: "SOLAI Wallet Documentation — Complete Guide to AI Crypto Commands",
+  title: "SOLAI Documentation — SDK and Wallet guides",
   description:
-    "Complete SOLAI Wallet documentation: features, AI commands, stealth addresses, agent wallets, security model, architecture, and tutorials for automating DeFi.",
+    "SOLAI documentation. The SDK guide covers agents, guardrail policies, swaps, payments, and stealth addresses. The Wallet guide covers the shipped Chrome extension — features, architecture, and security model.",
   keywords: [
     "SOLAI documentation",
-    "crypto wallet tutorial",
-    "AI commands",
-    "Solana DeFi",
+    "SOLAI SDK docs",
+    "SOLAI Wallet docs",
+    "Solana DeFi SDK",
+    "agent guardrails",
     "stealth addresses",
-    "automated trading guide",
   ],
   openGraph: {
-    title: "SOLAI Wallet Documentation",
+    title: "SOLAI Documentation",
     description:
-      "SOLAI Wallet documentation: features, AI commands, stealth addresses, agent wallets, security model, and architecture.",
+      "Two sets of docs — one for the SDK you build on, one for the wallet we built with it.",
     url: "https://solai.website/doc",
     type: "website",
   },
@@ -28,17 +26,10 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
+    googleBot: { index: true, follow: true },
   },
 };
 
 export default function DocPage() {
-  const content = readFileSync(
-    path.join(process.cwd(), "app/doc/solai-docs.md"),
-    "utf-8"
-  );
-  return <DocContent content={content} />;
+  return <DocsHub />;
 }

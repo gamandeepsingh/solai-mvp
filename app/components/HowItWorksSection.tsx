@@ -1,168 +1,175 @@
 "use client";
 
-import { motion } from "framer-motion";
-
-const CHROME_URL =
-  "https://chromewebstore.google.com/detail/solai-wallet/lfclbffajamcijjdpaomclldjpdgopej";
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { staggerChild, staggerParent } from "@/lib/motion";
+import Section, { SectionHeader } from "./ui/Section";
+import { Highlight } from "./ui/Reveal";
 
 interface Step {
   number: string;
   headline: string;
   body: string;
-  cta?: { label: string; href: string };
+  cta?: { label: string };
 }
 
 const STEPS: Step[] = [
   {
     number: "01",
-    headline: "Install the extension",
-    body: "Add SOLAI to Chrome in one click. Create a new wallet with a 12-word seed or import an existing one. Your keys never leave your device.",
-    cta: { label: "Add to Chrome", href: CHROME_URL },
+    headline: "Install the SDK",
+    body: "npm i @solai/sdk, then connect a Solana wallet provider. Non-custodial from line one — keys never touch your servers.",
+    cta: { label: "Get early access" },
   },
   {
     number: "02",
-    headline: "Type what you want",
-    body: 'Say "Send 10 USDC to Alice" or "Buy SOL if it drops 10%" or "Create an agent wallet for subscriptions". SOLAI parses intent and finds the optimal path.',
+    headline: "Define the policy",
+    body: "The user signs a policy: daily and per-transaction limits, which tokens, which protocols. That policy is the agent's entire authority.",
   },
   {
     number: "03",
-    headline: "Review and confirm",
-    body: "See a clear summary of the action with estimates (slippage, fees, route). One tap to sign. Transaction executes on-chain, receipt appears — done.",
+    headline: "Let the agent act",
+    body: "Call agent.swap(), agent.pay(), or agent.schedule(). Routes are found automatically, and every call is checked against the policy before it is signed.",
   },
   {
     number: "04",
-    headline: "Track and automate",
-    body: "Monitor your spending heatmap, manage agent wallets, collect stealth payments, and set up recurring orders — all without re-entering passwords.",
+    headline: "Stay in control",
+    body: "Users watch every action, tighten limits, or revoke the agent instantly. Payments can route through stealth addresses so nothing links back to their main wallet.",
   },
 ];
 
-const sectionFade = {
-  initial: { opacity: 0, y: 16 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-60px" } as const,
-  transition: { duration: 0.6, ease: "easeOut" as const },
-};
+function StepCard({
+  step,
+  index,
+  onOpenWaitlist,
+}: {
+  step: Step;
+  index: number;
+  onOpenWaitlist: () => void;
+}) {
+  const reduced = useReducedMotion();
 
-function StepCard({ step, index }: { step: Step; index: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{
-        duration: 0.55,
-        ease: [0.25, 1, 0.5, 1],
-        delay: index * 0.15,
-      }}
-      className="relative flex flex-col gap-4 p-6 rounded-2xl"
+      variants={staggerChild}
+      className="relative flex flex-col gap-4 p-6 rounded-2xl bg-white border border-[var(--hairline)]"
+      style={{ boxShadow: "var(--shadow-sm)" }}
     >
-      {/* Number circle */}
       <div
         className="relative w-10 h-10 rounded-full flex items-center justify-center shrink-0"
         style={{
-          background: "rgba(171,255,122,0.06)",
-          border: "1px solid rgba(171,255,122,0.22)",
+          background: "var(--accent-wash)",
+          border: "1px solid rgba(46,107,18,0.22)",
         }}
       >
-        <span className="text-[13px] font-bold text-[#ABFF7A] font-mono tracking-tight">
+        <span className="text-[13px] font-bold text-[var(--accent-ink)] font-mono tracking-tight">
           {step.number}
         </span>
 
-        {/* Pulse ring on first step only */}
-        {index === 0 && (
+        {index === 0 && !reduced && (
           <motion.div
             className="absolute inset-0 rounded-full"
-            style={{ border: "1px solid rgba(171,255,122,0.2)" }}
+            style={{ border: "1px solid rgba(46,107,18,0.3)" }}
             animate={{ scale: [1, 1.65], opacity: [0.5, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
           />
         )}
       </div>
 
-      {/* Text */}
       <div className="flex flex-col gap-2">
-        <h3 className="text-[18px] font-semibold text-white/90 tracking-tight">
+        <h3 className="text-[18px] font-semibold text-[var(--ink)] tracking-[-0.015em]">
           {step.headline}
         </h3>
-        <p className="text-[14px] text-white/40 leading-relaxed">{step.body}</p>
+        <p className="text-[14px] text-[var(--ink-secondary)] leading-relaxed">
+          {step.body}
+        </p>
       </div>
 
-      {/* Optional CTA */}
       {step.cta && (
-        <motion.a
-          href={step.cta.href}
-          target="_blank"
-          rel="noreferrer"
-          whileHover={{ scale: 1.02 }}
+        <motion.button
+          onClick={onOpenWaitlist}
+          whileHover={{ x: 2 }}
           whileTap={{ scale: 0.97 }}
-          className="self-start flex items-center gap-1.5 text-[12px] font-semibold text-[#ABFF7A] mt-1 group"
+          className="self-start flex items-center gap-1.5 text-[12px] font-semibold text-[var(--accent-ink)] mt-1 group"
         >
           {step.cta.label}
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
+          <ArrowRight
+            size={12}
+            strokeWidth={2.2}
             className="transition-transform duration-200 group-hover:translate-x-0.5"
-          >
-            <path
-              d="M2 6H10M6 2L10 6L6 10"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </motion.a>
+          />
+        </motion.button>
       )}
     </motion.div>
   );
 }
 
-export default function HowItWorksSection() {
+interface HowItWorksSectionProps {
+  onOpenWaitlist: () => void;
+}
+
+export default function HowItWorksSection({ onOpenWaitlist }: HowItWorksSectionProps) {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: gridRef,
+    offset: ["start 0.85", "end 0.6"],
+  });
+  const railScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
   return (
-    <section id="how-it-works" className="relative py-24 px-6 overflow-hidden">
-      {/* Ambient center glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full pointer-events-none"
-        style={{ background: "rgba(171,255,122,0.03)", filter: "blur(160px)" }}
-      />
+    <Section id="how-it-works" subtle blob="center">
+      <div className="flex flex-col gap-16">
+        <SectionHeader
+          eyebrow="How it works"
+          headline={[
+            "Four steps to",
+            <>
+              an <Highlight>agent that ships</Highlight>
+            </>,
+          ]}
+        />
 
-      <div className="max-w-5xl mx-auto flex flex-col gap-16">
-        {/* Section header */}
-        <motion.div
-          {...sectionFade}
-          className="flex flex-col items-center text-center gap-3"
-        >
-          <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-white/25">
-            How It Works
-          </p>
-          <h2 className="text-[36px] sm:text-[44px] font-bold tracking-[-0.025em] text-white">
-            Three steps to
-            <br />
-            <span className="text-shimmer">on-chain anything</span>
-          </h2>
-        </motion.div>
-
-        {/* Steps grid */}
-        <div className="relative grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6">
-          {/* Desktop connector line */}
+        <div ref={gridRef} className="relative">
+          {/* Scroll-linked progress rail */}
           <div
-            className="absolute top-9 hidden md:block pointer-events-none"
+            aria-hidden
+            className="absolute top-9 hidden lg:block pointer-events-none h-px"
             style={{
-              left: "calc(100% / 6)",
-              right: "calc(100% / 6)",
-              height: "1px",
-              background:
-                "linear-gradient(90deg, transparent, rgba(171,255,122,0.2) 20%, rgba(171,255,122,0.2) 80%, transparent)",
+              left: "calc(100% / 8)",
+              right: "calc(100% / 8)",
+              background: "var(--hairline)",
             }}
-          />
+          >
+            <motion.div
+              className="h-full origin-left"
+              style={{
+                scaleX: reduced ? 1 : railScale,
+                background:
+                  "linear-gradient(90deg, var(--accent-ink), var(--accent))",
+              }}
+            />
+          </div>
 
-          {STEPS.map((step, i) => (
-            <StepCard key={i} step={step} index={i} />
-          ))}
+          <motion.div
+            variants={staggerParent}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+            className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
+            {STEPS.map((step, i) => (
+              <StepCard
+                key={step.number}
+                step={step}
+                index={i}
+                onOpenWaitlist={onOpenWaitlist}
+              />
+            ))}
+          </motion.div>
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

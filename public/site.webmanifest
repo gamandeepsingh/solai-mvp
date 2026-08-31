@@ -1,13 +1,13 @@
 {
-  "name": "SOLAI Wallet — AI-powered crypto wallet",
-  "short_name": "SOLAI Wallet",
-  "description": "SOLAI is an AI-powered Solana wallet that turns natural language commands into automated on-chain actions.",
+  "name": "SOLAI — Non-custodial DeFi agents on Solana",
+  "short_name": "SOLAI",
+  "description": "SOLAI is a non-custodial DeFi SDK on Solana for building AI agents bounded by user-set guardrails.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
   "categories": ["finance"],
   "screenshots": [
     {

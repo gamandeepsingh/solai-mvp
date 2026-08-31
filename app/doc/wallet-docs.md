@@ -4,6 +4,8 @@
 
 Non-custodial Solana wallet built as a Chrome Extension. Autonomous agent wallets, ECDH stealth addresses, AI-powered commands, and full dApp connectivity.
 
+> Building your own agents? See the [SOLAI SDK documentation](/doc/sdk) — the same primitives, as a library.
+
 ---
 
 ## What makes SOLAI different

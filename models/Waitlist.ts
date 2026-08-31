@@ -1,9 +1,14 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
+export type WaitlistSource = "wallet" | "sdk";
+
+export const WAITLIST_SOURCES: WaitlistSource[] = ["wallet", "sdk"];
+
 export interface IWaitlist extends Document {
   email: string;
   createdAt: Date;
   ipAddress?: string;
+  source?: WaitlistSource;
 }
 
 const WaitlistSchema: Schema<IWaitlist> = new Schema(
@@ -18,6 +23,13 @@ const WaitlistSchema: Schema<IWaitlist> = new Schema(
     },
     ipAddress: {
       type: String,
+      required: false,
+    },
+    // Wallet-era rows predate this field and simply have no source.
+    source: {
+      type: String,
+      enum: WAITLIST_SOURCES,
+      default: "sdk",
       required: false,
     },
   },

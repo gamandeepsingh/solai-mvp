@@ -26,10 +26,11 @@ export default function ParticleCanvas() {
     let animationId: number;
     let particles: Particle[] = [];
 
+    // Dark motes on a light ground — a dense field reads as dust, so keep it faint.
     const COLORS = [
-      "rgba(171, 255, 122,",
-      "rgba(255, 255, 255,",
-      "rgba(140, 220, 80,",
+      "rgba(10, 10, 10,",
+      "rgba(46, 107, 18,",
+      "rgba(82, 82, 91,",
     ];
 
     const resize = () => {
@@ -39,7 +40,7 @@ export default function ParticleCanvas() {
     };
 
     const initParticles = () => {
-      const count = Math.floor((canvas.width * canvas.height) / 14000);
+      const count = Math.floor((canvas.width * canvas.height) / 20000);
       particles = Array.from({ length: count }, () => createParticle());
     };
 
@@ -49,8 +50,8 @@ export default function ParticleCanvas() {
       vx: (Math.random() - 0.5) * 0.25,
       vy: (Math.random() - 0.5) * 0.25,
       radius: Math.random() * 1.4 + 0.3,
-      opacity: Math.random() * 0.4 + 0.1,
-      targetOpacity: Math.random() * 0.5 + 0.1,
+      opacity: Math.random() * 0.06 + 0.02,
+      targetOpacity: Math.random() * 0.08 + 0.02,
       opacitySpeed: Math.random() * 0.004 + 0.001,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
     });
@@ -71,7 +72,7 @@ export default function ParticleCanvas() {
 
         // Fade in/out
         if (Math.abs(p.opacity - p.targetOpacity) < p.opacitySpeed) {
-          p.targetOpacity = Math.random() * 0.5 + 0.05;
+          p.targetOpacity = Math.random() * 0.08 + 0.015;
         }
         p.opacity += p.opacity < p.targetOpacity ? p.opacitySpeed : -p.opacitySpeed;
 

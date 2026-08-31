@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import Waitlist from "@/models/Waitlist";
+import Waitlist, { WAITLIST_SOURCES, type WaitlistSource } from "@/models/Waitlist";
 import nodemailer from "nodemailer";
 
 // GET: return total waitlist count
@@ -18,11 +18,15 @@ export async function GET() {
 // POST: add new email to waitlist + send confirmation email
 export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
+    const { email, source } = await req.json();
 
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
     }
+
+    const resolvedSource: WaitlistSource = WAITLIST_SOURCES.includes(source)
+      ? source
+      : "sdk";
 
     await connectDB();
 
@@ -39,7 +43,11 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-real-ip") ||
       "unknown";
 
-    const entry = await Waitlist.create({ email: email.toLowerCase(), ipAddress });
+    const entry = await Waitlist.create({
+      email: email.toLowerCase(),
+      ipAddress,
+      source: resolvedSource,
+    });
 
     const count = await Waitlist.countDocuments();
 
@@ -92,32 +100,36 @@ async function sendConfirmationEmail(email: string, position: number) {
   });
 
   await transporter.sendMail({
-    from: `"SOLAI Wallet" <${from}>`,
+    from: `"SOLAI" <${from}>`,
     to: email,
-    subject: "You're on the SOLAI Wallet waitlist 🚀",
+    subject: "You're on the SOLAI SDK early access list",
     html: `
       <!DOCTYPE html>
       <html>
         <head><meta charset="utf-8" /></head>
-        <body style="margin:0;padding:0;background:#000000;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#000000;padding:48px 24px;">
+        <body style="margin:0;padding:0;background:#FAFAF9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#FAFAF9;padding:48px 24px;">
             <tr>
               <td align="center">
-                <table width="520" cellpadding="0" cellspacing="0" style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:16px;padding:48px 40px;">
+                <table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #E7E5E4;border-radius:16px;padding:48px 40px;">
                   <tr>
                     <td>
-                      <p style="margin:0 0 32px;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#ABFF7A;font-weight:600;">SOLAI Wallet</p>
-                      <h1 style="margin:0 0 16px;font-size:28px;font-weight:700;color:#ffffff;line-height:1.2;">You're on the list.</h1>
-                      <p style="margin:0 0 32px;font-size:16px;color:#888888;line-height:1.6;">
-                        Welcome to the future of crypto. You're <strong style="color:#ABFF7A;">#${position}</strong> on the SOLAI Wallet waitlist.
-                        We'll reach out when it's your turn.
+                      <p style="margin:0 0 32px;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#2E6B12;font-weight:600;">SOLAI SDK</p>
+                      <h1 style="margin:0 0 16px;font-size:28px;font-weight:700;color:#0A0A0A;line-height:1.2;">You're on the list.</h1>
+                      <p style="margin:0 0 32px;font-size:16px;color:#52525B;line-height:1.6;">
+                        You're <strong style="color:#0A0A0A;">#${position}</strong> in line for early access to the SOLAI SDK —
+                        non-custodial DeFi agents on Solana, bounded by guardrails your users set.
+                        When the private beta opens we'll send you the docs and your private npm tag.
                       </p>
-                      <div style="background:#111111;border:1px solid #1e1e1e;border-radius:12px;padding:20px 24px;margin-bottom:32px;">
-                        <p style="margin:0 0 8px;font-size:12px;color:#555555;text-transform:uppercase;letter-spacing:0.1em;">Your position</p>
-                        <p style="margin:0;font-size:32px;font-weight:700;color:#ABFF7A;">#${position}</p>
+                      <div style="background:#FAFAF9;border:1px solid #E7E5E4;border-radius:12px;padding:20px 24px;margin-bottom:32px;">
+                        <p style="margin:0 0 8px;font-size:12px;color:#A1A1AA;text-transform:uppercase;letter-spacing:0.1em;">Your position</p>
+                        <p style="margin:0;font-size:32px;font-weight:700;color:#0A0A0A;">#${position}</p>
                       </div>
-                      <p style="margin:0;font-size:13px;color:#444444;">
-                        SOLAI Wallet · AI-powered crypto, on-chain actions
+                      <p style="margin:0 0 8px;font-size:14px;color:#52525B;line-height:1.6;">
+                        In the meantime, the SOLAI Wallet — the reference app built on this SDK — is live on the Chrome Web Store.
+                      </p>
+                      <p style="margin:24px 0 0;font-size:13px;color:#A1A1AA;">
+                        SOLAI · Non-custodial DeFi agents on Solana
                       </p>
                     </td>
                   </tr>

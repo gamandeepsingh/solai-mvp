@@ -1,426 +1,156 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import gsap from "gsap";
-import Image from "next/image";
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
+import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
+import { CHROME_URL } from "@/lib/constants";
+import { HERO_SNIPPET, HERO_SNIPPET_RAW } from "@/lib/snippets";
+import { springSoft, staggerChild, staggerParent } from "@/lib/motion";
+import Button from "./ui/Button";
+import CodeBlock from "./ui/CodeBlock";
+import { Highlight } from "./ui/Reveal";
 
-const CHROME_URL =
-  "https://chromewebstore.google.com/detail/solai-wallet/lfclbffajamcijjdpaomclldjpdgopej";
-
-// ─── Chat Data ───────────────────────────────────────────────────────
-interface ChatMessage {
-  role: "user" | "ai";
-  text: string;
-  meta?: string;
-  time: string;
-}
-
-const CHAT_MESSAGES: ChatMessage[] = [
-  { role: "user", text: "Send $5 to mom every day", time: "9:01 AM" },
-  {
-    role: "ai",
-    text: "Done. Recurring payment set up — $5 daily to mom starting tomorrow.",
-    meta: "Scheduled · Daily at 9:00 AM",
-    time: "9:01 AM",
-  },
-  { role: "user", text: "Buy 0.1 ETH if price drops 10%", time: "9:02 AM" },
-  {
-    role: "ai",
-    text: "Got it. I'll monitor ETH and place the order automatically when the condition hits.",
-    meta: "Watching · ETH/USD",
-    time: "9:02 AM",
-  },
-  { role: "user", text: "Swap USDC to SOL at the best rate", time: "9:03 AM" },
-  {
-    role: "ai",
-    text: "Checked 4 routes. Best rate is via Jupiter — saving you $2.40 vs average.",
-    meta: "Executed · Jupiter DEX",
-    time: "9:03 AM",
-  },
-];
-
-// ─── Typing Dots ──────────────────────────────────────────────────────
-function TypingDots() {
-  return (
-    <div className="flex items-center gap-1.25 py-0.5">
-      {[0, 1, 2].map((i) => (
-        <motion.span
-          key={i}
-          className="w-1.5 h-1.5 rounded-full bg-white/40"
-          animate={{ opacity: [0.25, 0.85, 0.25], y: [0, -3, 0] }}
-          transition={{
-            duration: 1,
-            repeat: Infinity,
-            delay: i * 0.2,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// ─── Chat Bubble ──────────────────────────────────────────────────────
-function ChatBubble({ msg, chatKey }: { msg: ChatMessage; chatKey: number }) {
-  const isUser = msg.role === "user";
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
-      className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"}`}
-      key={`${chatKey}-${msg.time}`}
-    >
-      {/* AI avatar */}
-      {!isUser && (
-        <div className="w-6 h-6 rounded-full bg-[#161616] border border-white/8 flex items-center justify-center shrink-0 mb-0.5 overflow-hidden">
-          <Image
-            src="/solai-logo.png"
-            width={14}
-            height={14}
-            alt="SOLAI"
-            className="object-contain"
-          />
-        </div>
-      )}
-
-      <div
-        className={`flex flex-col gap-1 max-w-[76%] ${
-          isUser ? "items-end" : "items-start"
-        }`}
-      >
-        {/* Bubble */}
-        <div
-          className={`px-3.5 py-2.5 text-[13px] leading-[1.55] ${
-            isUser
-              ? "bg-[#202020] text-white/85 rounded-2xl rounded-br-[5px]"
-              : "bg-[#141414] text-white/80 rounded-2xl rounded-bl-[5px] border border-white/6"
-          }`}
-        >
-          {msg.text}
-        </div>
-
-        {/* Meta row */}
-        <div className="flex items-center gap-2 px-0.5">
-          <span className="text-[10px] text-white/20">{msg.time}</span>
-          {msg.meta && (
-            <>
-              <span className="text-white/15 text-[10px]">·</span>
-              <span className="text-[10px] text-[#ABFF7A]/50 flex items-center gap-1">
-                <span className="w-1.25 h-1.25 rounded-full bg-[#ABFF7A]/50 inline-block" />
-                {msg.meta}
-              </span>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* User avatar placeholder */}
-      {isUser && (
-        <div className="w-6 h-6 rounded-full bg-[#242424] border border-white/8 flex items-center justify-center shrink-0 mb-0.5 text-[9px] text-white/40 font-medium">
-          U
-        </div>
-      )}
-    </motion.div>
-  );
-}
-
-// ─── Chat Demo ────────────────────────────────────────────────────────
-function ChatDemo() {
-  const [visibleCount, setVisibleCount] = useState(0);
-  const [showTyping, setShowTyping] = useState(false);
-  const [chatKey, setChatKey] = useState(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Sequential reveal
-  useEffect(() => {
-    if (visibleCount >= CHAT_MESSAGES.length) return;
-
-    const isAI = CHAT_MESSAGES[visibleCount].role === "ai";
-    const baseDelay = visibleCount === 0 ? 800 : 650;
-    const typingMs = isAI ? 1000 : 0;
-
-    const t1 = setTimeout(() => {
-      if (isAI) setShowTyping(true);
-    }, baseDelay);
-
-    const t2 = setTimeout(() => {
-      setShowTyping(false);
-      setVisibleCount((c) => c + 1);
-    }, baseDelay + typingMs);
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [visibleCount]);
-
-  // Smooth scroll to bottom
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  }, [visibleCount, showTyping]);
-
-  // Restart loop
-  useEffect(() => {
-    if (visibleCount < CHAT_MESSAGES.length) return;
-    const t = setTimeout(() => {
-      setVisibleCount(0);
-      setChatKey((k) => k + 1);
-    }, 3800);
-    return () => clearTimeout(t);
-  }, [visibleCount]);
-
-  return (
-    <div className="relative w-full max-w-lg mx-auto">
-      {/* Subtle glow behind */}
-      <motion.div
-        className="absolute -inset-8 rounded-3xl pointer-events-none"
-        animate={{ opacity: [0.03, 0.09, 0.03] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 60%, #ABFF7A 0%, transparent 68%)",
-        }}
-      />
-
-      {/* Chat window */}
-      <div
-        className="relative rounded-2xl border border-white/8 bg-[#080808] overflow-hidden"
-        style={{
-          boxShadow:
-            "0 32px 64px -12px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.04)",
-        }}
-      >
-        {/* ── Header ── */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-white/6 bg-[#0b0b0b]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#111] border border-white/8 flex items-center justify-center overflow-hidden">
-              <Image
-                src="/solai-logo.png"
-                width={22}
-                height={22}
-                alt="SOLAI"
-                className="object-contain"
-              />
-            </div>
-            <div>
-              <p className="text-[13px] font-dancing-script font-semibold text-white/85 leading-none">
-                SOLAI
-              </p>
-              <p className="text-[10px] text-white/30 mt-0.5">AI Wallet</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ABFF7A] animate-pulse" />
-            <span className="text-[11px] text-white/35">Online</span>
-          </div>
-        </div>
-
-        {/* ── Messages (FIXED height = no jerking) ── */}
-        <div
-          ref={scrollRef}
-          className="flex flex-col gap-3.5 px-4 py-4 overflow-y-auto"
-          style={{ height: "280px", scrollbarWidth: "none" }}
-        >
-          {CHAT_MESSAGES.slice(0, visibleCount).map((msg, i) => (
-            <ChatBubble key={`${chatKey}-${i}`} msg={msg} chatKey={chatKey} />
-          ))}
-
-          <AnimatePresence>
-            {showTyping && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 4 }}
-                transition={{ duration: 0.22 }}
-                className="flex items-end gap-2 justify-start"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#161616] border border-white/8 flex items-center justify-center shrink-0 overflow-hidden">
-                  <Image
-                    src="/solai-logo.png"
-                    width={12}
-                    height={12}
-                    alt="SOLAI"
-                    className="object-contain"
-                  />
-                </div>
-                <div className="bg-[#141414] border border-white/6 rounded-2xl rounded-bl-[5px] px-3.5 py-2.5">
-                  <TypingDots />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* ── Input bar ── */}
-        <div className="border-t border-white/6 px-4 py-3 bg-[#0b0b0b] flex items-center gap-2.5">
-          <div className="relative flex-1 flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#111] border border-white/[0.07]">
-            <span className="text-[13px] text-white/20 flex-1">
-              Ask SOLAI anything...
-            </span>
-            <span className="absolute left-3.5 w-0.5 h-3.5 rounded-sm bg-white/25 animate-blink shrink-0" />
-          </div>
-          <button className="w-8 h-8 rounded-lg bg-[#ABFF7A] flex items-center justify-center hover:brightness-110 transition-all duration-150 active:scale-95">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7L12 2L7 12L6 8L2 7Z" fill="black" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Hero Section ─────────────────────────────────────────────────────
 interface HeroSectionProps {
   onOpenWaitlist: () => void;
 }
 
 export default function HeroSection({ onOpenWaitlist }: HeroSectionProps) {
   const heroRef = useRef<HTMLElement>(null);
-  const leftColRef = useRef<HTMLDivElement>(null);
-  const chatColRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.set([leftColRef.current, chatColRef.current], {
-        opacity: 0,
-        y: 36,
-      });
-      gsap.set(chatColRef.current, { x: 16 });
-
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.to(leftColRef.current, { opacity: 1, y: 0, duration: 0.9, delay: 0.2 }).to(
-        chatColRef.current,
-        { opacity: 1, y: 0, x: 0, duration: 0.9 },
-        "-=0.55"
-      );
-    }, heroRef);
-    return () => ctx.revert();
-  }, []);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const codeY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : -60]);
+  const blobY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 80]);
 
   return (
     <section
       ref={heroRef}
       className="relative min-h-screen flex items-center overflow-hidden px-6"
     >
-      {/* Ambient glows */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-[10%] left-1/2 -translate-x-1/2 w-175 h-125 rounded-full bg-[#ABFF7A]/4.5 blur-[160px]" />
-        <div className="absolute -bottom-[10%] left-1/2 -translate-x-1/2 w-150 h-100 rounded-full bg-[#ABFF7A]/2.5 blur-[140px]" />
-        {/* Right-side glow for chat column */}
-        <div className="absolute right-[-5%] top-[20%] w-96 h-96 rounded-full bg-[#ABFF7A]/5 blur-[120px] hidden lg:block" />
+      {/* Ambient neon */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <motion.div
+          style={{ y: blobY, background: "var(--accent-blob)", filter: "blur(170px)" }}
+          className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[760px] h-[460px] rounded-full opacity-60"
+        />
+        <motion.div
+          style={{ y: blobY, background: "var(--accent-blob)", filter: "blur(150px)" }}
+          className="absolute top-[25%] right-[-8%] w-[420px] h-[420px] rounded-full opacity-40 hidden lg:block"
+        />
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center pt-32 pb-20">
-        {/* ── Left column: text & CTAs ── */}
-        <div
-          ref={leftColRef}
+      <div className="relative z-10 w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center pt-32 pb-20">
+        {/* ── Left: the pitch ── */}
+        <motion.div
+          variants={staggerParent}
+          initial="hidden"
+          animate="show"
           className="flex flex-col gap-6 items-center lg:items-start text-center lg:text-left"
         >
           {/* Badge */}
-          <motion.a
-            href={CHROME_URL}
-            target="_blank"
-            rel="noreferrer"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.35 }}
-            className="group flex items-center cursor-pointer font-medium text-[11px] px-4 py-2 text-white/70 tracking-[0.12em] rounded-full border border-white/10 bg-white/3 hover:bg-white/6 transition-colors"
-          >
-            <svg
-              className="mr-1.5 rotate-30 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-1 group-hover:rotate-90"
-              height="15"
-              width="15"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
+          <motion.div variants={staggerChild}>
+            <Link
+              href="/sdk"
+              className="group inline-flex items-center gap-2 font-medium text-[11px] px-3.5 py-2 tracking-[0.1em] uppercase rounded-full border border-[var(--hairline)] bg-[var(--accent-wash)] text-[var(--accent-ink)] hover:border-[var(--accent-ink)]/30 transition-colors duration-200"
             >
-              <path d="M0 0h24v24H0z" fill="none" />
-              <path d="M5 13c0-5.088 2.903-9.436 7-11.182C16.097 3.564 19 7.912 19 13c0 .823-.076 1.626-.22 2.403l1.94 1.832a.5.5 0 0 1 .095.603l-2.495 4.575a.5.5 0 0 1-.793.114l-2.234-2.234a1 1 0 0 0-.707-.293H9.414a1 1 0 0 0-.707.293l-2.234 2.234a.5.5 0 0 1-.793-.114l-2.495-4.575a.5.5 0 0 1 .095-.603l1.94-1.832C5.077 14.626 5 13.823 5 13zm1.476 6.696l.817-.817A3 3 0 0 1 9.414 18h5.172a3 3 0 0 1 2.121.879l.817.817.982-1.8-1.1-1.04a2 2 0 0 1-.593-1.82c.124-.664.187-1.345.187-2.036 0-3.87-1.995-7.3-5-8.96C8.995 5.7 7 9.13 7 13c0 .691.063 1.372.187 2.037a2 2 0 0 1-.593 1.82l-1.1 1.039.982 1.8zM12 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-            </svg>
-            <span className="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-1">
-              Now live on Chrome Web Store
-            </span>
-          </motion.a>
+              <Sparkles size={13} strokeWidth={2} />
+              SOLAI SDK · Private beta
+              <ArrowRight
+                size={12}
+                strokeWidth={2}
+                className="transition-transform duration-300 group-hover:translate-x-0.5"
+              />
+            </Link>
+          </motion.div>
 
-          {/* Heading */}
-          <h1 className="text-[52px] sm:text-[64px] lg:text-[72px] xl:text-[80px] font-bold tracking-[-0.03em] leading-[0.9]">
-            <span className="text-white">The Wallet</span>
-            <br />
-            <span className="text-white">That </span>
-            <span className="text-shimmer">Thinks</span>
+          {/* Headline */}
+          <h1 className="text-[52px] sm:text-[64px] lg:text-[72px] xl:text-[88px] font-semibold tracking-[-0.04em] leading-[0.88] text-[var(--ink)]">
+            <motion.span variants={staggerChild} className="block">
+              DeFi agents.
+            </motion.span>
+            <motion.span variants={staggerChild} className="block">
+              On <Highlight>your</Highlight> rails.
+            </motion.span>
           </h1>
 
           {/* Sub */}
-          <p className="text-[16px] sm:text-[17px] text-white/50 leading-relaxed max-w-sm">
-            Plain English → on-chain actions. Stealth payments, autonomous
-            agents, best-rate swaps — all in one wallet.
-          </p>
+          <motion.p
+            variants={staggerChild}
+            className="text-[16px] sm:text-[17px] text-[var(--ink-secondary)] leading-relaxed max-w-md"
+          >
+            A non-custodial DeFi SDK on Solana. Ship AI agents that swap and pay on
+            your users&apos; behalf — inside spending limits, token allowlists, and
+            protocol allowlists they set themselves.
+          </motion.p>
 
-          {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row items-center lg:items-start gap-3 mt-1">
-            <motion.a
-              href={CHROME_URL}
-              target="_blank"
-              rel="noreferrer"
-              whileHover={{
-                scale: 1.03,
-                boxShadow:
-                  "0 0 28px rgba(171,255,122,0.4), 0 0 60px rgba(171,255,122,0.1)",
-              }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#ABFF7A] text-black text-[14px] font-semibold tracking-wide"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <circle cx="12" cy="12" r="4" />
-                <line x1="21.17" y1="8" x2="12" y2="8" />
-                <line x1="3.95" y1="6.06" x2="8.54" y2="14" />
-                <line x1="10.88" y1="21.94" x2="15.46" y2="14" />
-              </svg>
-              Add to Chrome — Beta
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M2 7H12M7 2L12 7L7 12"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </motion.a>
+          {/* CTAs */}
+          <motion.div
+            variants={staggerChild}
+            className="flex flex-col sm:flex-row items-center lg:items-start gap-3 mt-1"
+          >
+            <Button onClick={onOpenWaitlist} magnetic>
+              Get early access
+              <ArrowRight size={15} strokeWidth={2.2} />
+            </Button>
 
-            <motion.button
-              onClick={onOpenWaitlist}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl glass border border-white/8 text-white/60 text-[14px] font-medium hover:text-white/85 hover:border-white/18 transition-colors duration-200"
-            >
-              Join Waitlist
-            </motion.button>
-          </div>
-        </div>
+            <Button href="/sdk" variant="secondary" className="group">
+              Explore the SDK
+              <ArrowRight
+                size={15}
+                strokeWidth={2}
+                className="transition-transform duration-300 group-hover:translate-x-0.5"
+              />
+            </Button>
+          </motion.div>
 
-        {/* ── Right column: chat demo ── */}
-        <div
-          ref={chatColRef}
+          {/* Shipped-product proof */}
+          <motion.a
+            variants={staggerChild}
+            href={CHROME_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="group inline-flex items-center gap-2 text-[13px] text-[var(--ink-tertiary)] hover:text-[var(--ink-secondary)] transition-colors duration-200 mt-2"
+          >
+            <span className="relative flex w-1.5 h-1.5 shrink-0">
+              <span className="absolute inline-flex w-full h-full rounded-full bg-[var(--accent-ink)] opacity-60 animate-ping" />
+              <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-[var(--accent-ink)]" />
+            </span>
+            SOLAI Wallet is live on Chrome — built on this SDK.
+            <ArrowUpRight
+              size={13}
+              strokeWidth={2}
+              className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </motion.a>
+        </motion.div>
+
+        {/* ── Right: the code ── */}
+        <motion.div
+          initial={reduced ? false : { opacity: 0, y: 36, x: 16 }}
+          animate={{ opacity: 1, y: 0, x: 0 }}
+          transition={{ ...springSoft, delay: 0.25 }}
+          style={{ y: codeY }}
           className="relative flex items-center justify-center lg:justify-end"
         >
           <motion.div
             style={{ perspective: 1200 }}
-            whileHover={{ rotateY: -3, rotateX: 2 }}
+            whileHover={reduced ? undefined : { rotateY: -3, rotateX: 2 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="w-full max-w-[460px]"
+            className="w-full max-w-[500px]"
           >
-            <ChatDemo />
+            <CodeBlock
+              filename="agent.ts"
+              lines={HERO_SNIPPET}
+              copyText={HERO_SNIPPET_RAW}
+              typewriter
+              height={272}
+            />
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

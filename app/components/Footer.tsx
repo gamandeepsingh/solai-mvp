@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-
-const CHROME_URL = "https://chromewebstore.google.com/detail/solai-wallet/lfclbffajamcijjdpaomclldjpdgopej";
+import Link from "next/link";
+import { CHROME_URL, X_URL } from "@/lib/constants";
 
 function FooterLink({
   href,
@@ -13,37 +13,41 @@ function FooterLink({
   children: React.ReactNode;
   external?: boolean;
 }) {
+  const className =
+    "text-[13px] text-[var(--ink-secondary)] hover:text-[var(--ink)] transition-colors duration-200 w-fit";
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" className={className}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
-      className="text-[13px] text-white/35 hover:text-white/70 transition-colors duration-200 w-fit"
-    >
+    <Link href={href} className={className}>
       {children}
-    </a>
+    </Link>
+  );
+}
+
+function ColumnHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-[var(--ink-tertiary)] mb-1">
+      {children}
+    </p>
   );
 }
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/6 pt-16 pb-10 px-6 overflow-hidden">
-      {/* Top accent glow line */}
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(171,255,122,0.15), transparent)",
-        }}
-      />
-
+    <footer className="relative border-t border-[var(--hairline)] pt-16 pb-10 px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto flex flex-col gap-12">
-        {/* Top grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Brand column */}
-          <div className="col-span-2 sm:col-span-2 lg:col-span-1 flex flex-col gap-4">
-            <a href="/" className="flex items-center gap-2.5 w-fit group">
-              <div className="w-8 h-8 rounded-xl bg-[#111] border border-white/8 flex items-center justify-center overflow-hidden group-hover:border-[#ABFF7A]/20 transition-colors duration-300">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand */}
+          <div className="col-span-2 lg:col-span-1 flex flex-col gap-4">
+            <Link href="/" className="flex items-center gap-2.5 w-fit group">
+              <div className="w-8 h-8 rounded-xl bg-white border border-[var(--hairline)] flex items-center justify-center overflow-hidden group-hover:border-[var(--accent-ink)]/30 transition-colors duration-300">
                 <Image
                   src="/solai-logo.png"
                   width={20}
@@ -52,36 +56,43 @@ export default function Footer() {
                   className="object-contain"
                 />
               </div>
-              <span className="text-[16px] font-dancing-script font-semibold text-white/90">
+              <span className="text-[16px] font-dancing-script font-semibold text-[var(--ink)]">
                 SOLAI
               </span>
-            </a>
-            <p className="text-[13px] text-white/30 leading-relaxed max-w-[200px]">
-              The AI-powered Solana wallet. Plain English → on-chain actions.
+            </Link>
+            <p className="text-[13px] text-[var(--ink-secondary)] leading-relaxed max-w-[220px]">
+              Non-custodial DeFi agents on Solana. Guardrails included.
             </p>
-            {/* Social icons */}
+
             <div className="flex items-center gap-2 mt-1">
-              {/* X / Twitter */}
               <a
-                href="https://x.com/solaiwallet"
+                href={X_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="w-8 h-8 rounded-lg glass flex items-center justify-center text-white/30 hover:text-white/70 hover:bg-white/6 transition-all duration-200"
+                className="w-8 h-8 rounded-lg bg-white border border-[var(--hairline)] flex items-center justify-center text-[var(--ink-secondary)] hover:text-[var(--ink)] hover:border-[rgba(10,10,10,0.18)] transition-all duration-200"
                 aria-label="SOLAI on X"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </a>
-              {/* Chrome */}
               <a
                 href={CHROME_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="w-8 h-8 rounded-lg glass flex items-center justify-center text-white/30 hover:text-white/70 hover:bg-white/6 transition-all duration-200"
+                className="w-8 h-8 rounded-lg bg-white border border-[var(--hairline)] flex items-center justify-center text-[var(--ink-secondary)] hover:text-[var(--ink)] hover:border-[rgba(10,10,10,0.18)] transition-all duration-200"
                 aria-label="Install SOLAI on Chrome"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <circle cx="12" cy="12" r="10" />
                   <circle cx="12" cy="12" r="4" />
                   <line x1="21.17" y1="8" x2="12" y2="8" />
@@ -92,50 +103,42 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Product */}
+          {/* Developers */}
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-white/25 mb-1">
-              Product
-            </p>
-            <FooterLink href="#features">Features</FooterLink>
-            <FooterLink href="#how-it-works">How It Works</FooterLink>
-            <FooterLink href="/doc">Documentation</FooterLink>
-            <FooterLink href={CHROME_URL} external>
-              Install Extension
-            </FooterLink>
+            <ColumnHeading>Developers</ColumnHeading>
+            <FooterLink href="/sdk">SOLAI SDK</FooterLink>
+            <FooterLink href="/doc/sdk">SDK documentation</FooterLink>
+            <FooterLink href="/sdk#guardrails-reference">Guardrails</FooterLink>
+            <FooterLink href="/sdk#early-access">Early access</FooterLink>
           </div>
 
-          {/* Community */}
+          {/* Product */}
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-white/25 mb-1">
-              Community
-            </p>
-            <FooterLink href="https://x.com/solaiwallet" external>
-              Twitter / X
+            <ColumnHeading>Product</ColumnHeading>
+            <FooterLink href="/#wallet">SOLAI Wallet</FooterLink>
+            <FooterLink href="/doc/wallet">Wallet documentation</FooterLink>
+            <FooterLink href="/#how-it-works">How it works</FooterLink>
+            <FooterLink href={CHROME_URL} external>
+              Chrome extension
             </FooterLink>
-            <FooterLink href="#commands">Command Gallery</FooterLink>
           </div>
 
           {/* Legal */}
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-white/25 mb-1">
-              Legal
-            </p>
+            <ColumnHeading>Legal</ColumnHeading>
             <FooterLink href="/privacy">Privacy Policy</FooterLink>
             <FooterLink href="/term-condition">Terms of Service</FooterLink>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="w-full h-px bg-white/5" />
+        <div className="w-full h-px bg-[var(--hairline)]" />
 
-        {/* Bottom row */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[12px] text-white/25">
+          <p className="text-[12px] text-[var(--ink-tertiary)]">
             © {new Date().getFullYear()} SOLAI. All rights reserved.
           </p>
-          <div className="flex items-center gap-2 text-[12px] text-white/25">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ABFF7A] animate-pulse" />
+          <div className="flex items-center gap-2 text-[12px] text-[var(--ink-tertiary)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-ink)] animate-pulse" />
             Built on Solana
           </div>
         </div>

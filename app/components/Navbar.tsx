@@ -10,7 +10,7 @@ import { springSoft } from "@/lib/motion";
 import Button from "./ui/Button";
 
 const NAV_LINKS = [
-  { label: "SDK", href: "#sdk" },
+  { label: "SDK", href: "/sdk" },
   { label: "Guardrails", href: "#guardrails" },
   { label: "Wallet", href: "#wallet" },
 ];

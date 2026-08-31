@@ -35,11 +35,11 @@ export default function HeroSection({ onOpenWaitlist }: HeroSectionProps) {
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <motion.div
           style={{ y: blobY, background: "var(--accent-blob)", filter: "blur(170px)" }}
-          className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[760px] h-[460px] rounded-full opacity-60"
+          className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[760px] h-[460px] rounded-full opacity-70"
         />
         <motion.div
           style={{ y: blobY, background: "var(--accent-blob)", filter: "blur(150px)" }}
-          className="absolute top-[25%] right-[-8%] w-[420px] h-[420px] rounded-full opacity-40 hidden lg:block"
+          className="absolute top-[25%] right-[-8%] w-[420px] h-[420px] rounded-full opacity-50 hidden lg:block"
         />
       </div>
 

@@ -73,8 +73,36 @@ const CAPABILITIES: { Icon: LucideIcon; title: string; body: string }[] = [
   { Icon: Send, title: "Payments", body: "One-off transfers to wallets or handles." },
   { Icon: Repeat, title: "Recurring", body: "Scheduled transfers on any cadence." },
   { Icon: Timer, title: "Conditional orders", body: "Execute when a price condition hits." },
-  { Icon: EyeOff, title: "Stealth addresses", body: "Umbra-derived, fresh every payment." },
+  {
+    Icon: EyeOff,
+    title: "Umbra stealth addresses",
+    body: "Umbra-derived one-time addresses, fresh every payment.",
+  },
   { Icon: Radio, title: "x402 micropayments", body: "Machine-scale payments over HTTP." },
+];
+
+// ─── Umbra stealth-address flow ───────────────────────────────────────
+const UMBRA_FLOW = [
+  {
+    title: "Publish a meta-address",
+    body: "The recipient generates one shareable meta-address, once. It is safe to post publicly — it reveals nothing about their balances or history.",
+    call: "solai.stealth.createMetaAddress()",
+  },
+  {
+    title: "Derive a one-time address",
+    body: "The sender derives a unique address from that meta-address via X25519 ECDH. Only the recipient can compute the matching private key.",
+    call: "agent.pay({ stealth: true })",
+  },
+  {
+    title: "Send",
+    body: "Funds land at the freshly derived address. Nothing on-chain links it back to the recipient's main wallet or to any earlier payment.",
+    call: "// settles on Solana",
+  },
+  {
+    title: "Scan and sweep",
+    body: "The recipient scans for incoming stealth payments and sweeps them to their main wallet whenever they choose — or leaves them where they are.",
+    call: "solai.stealth.scan()",
+  },
 ];
 
 // ─── Roadmap ──────────────────────────────────────────────────────────
@@ -304,6 +332,66 @@ export default function SdkContent() {
 
         {/* ── Stealth deep dive (shared with the homepage) ── */}
         <StealthSection />
+
+        {/* ── Umbra protocol ── */}
+        <Section id="umbra" subtle blob="top">
+          <div className="flex flex-col gap-12">
+            <SectionHeader
+              eyebrow="Umbra"
+              headline={[
+                <>
+                  Stealth addresses, <Highlight>by Umbra</Highlight>
+                </>,
+              ]}
+              sub="SOLAI's private payments are built on Umbra — the stealth-address scheme that lets one published meta-address receive an unlimited number of unlinkable payments."
+            />
+
+            <Reveal className="max-w-3xl mx-auto w-full">
+              <motion.ol
+                variants={staggerParent}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-60px" }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              >
+                {UMBRA_FLOW.map((step, i) => (
+                  <motion.li
+                    key={step.title}
+                    variants={staggerChild}
+                    className="flex flex-col gap-3 p-5 rounded-2xl bg-white border border-[var(--hairline)]"
+                    style={{ boxShadow: "var(--shadow-sm)" }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-[12px] font-bold font-mono text-[var(--accent-ink)]"
+                        style={{
+                          background: "var(--accent-wash)",
+                          border: "1px solid rgba(46,107,18,0.18)",
+                        }}
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="text-[15px] font-semibold text-[var(--ink)] tracking-[-0.01em]">
+                        {step.title}
+                      </h3>
+                    </div>
+                    <p className="text-[13.5px] text-[var(--ink-secondary)] leading-relaxed">
+                      {step.body}
+                    </p>
+                    <code className="text-[12px] font-mono text-[var(--accent-ink)] bg-[var(--accent-wash)] px-2 py-1.5 rounded-md border border-[rgba(46,107,18,0.14)] w-fit">
+                      {step.call}
+                    </code>
+                  </motion.li>
+                ))}
+              </motion.ol>
+
+              <p className="mt-6 text-center text-[13px] text-[var(--ink-secondary)]">
+                One meta-address in, unlimited unlinkable addresses out — the
+                recipient&apos;s main wallet never appears on-chain.
+              </p>
+            </Reveal>
+          </div>
+        </Section>
 
         {/* ── Capabilities ── */}
         <Section id="capabilities" subtle blob="top">

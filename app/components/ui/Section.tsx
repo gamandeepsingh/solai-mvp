@@ -43,7 +43,7 @@ export default function Section({
           style={{
             background: "var(--accent-blob)",
             filter: "blur(170px)",
-            opacity: 0.5,
+            opacity: 0.7,
           }}
         />
       )}

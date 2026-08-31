@@ -15,7 +15,9 @@
   /* Accent as ink — 6.5:1 on white. Text, hairlines, small icon strokes. */
   --accent-ink:    #2E6B12;
   --accent-wash:   rgba(171, 255, 122, 0.14);
-  --accent-blob:   rgba(171, 255, 122, 0.55);
+  /* Ambient glow, pre-blur. Kept low — at full strength the neon washes the
+     whole upper page green rather than reading as a soft light source. */
+  --accent-blob:   rgba(171, 255, 122, 0.30);
 
   --hairline:      rgba(10, 10, 10, 0.08);
   --hairline-soft: rgba(10, 10, 10, 0.05);
